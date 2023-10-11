@@ -106,23 +106,36 @@
             methods: {
                 async login() {
                     try {
-                        const response = await fetch('https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=e7bbd234f0b35bd69d0b056101c54be1', {
+                        const apiKey = 'e7bbd234f0b35bd69d0b056101c54be1'; // Tu clave de API de TMDb
+                        const token = '7b7aeb7442b6661e4ca5571d9fa17db3a03f4954'; // Reemplaza con tu token de solicitud real
+                        const username = 'tu_nombre_de_usuario'; // Reemplaza con tu nombre de usuario real
+                        const password = 'tu_contraseña'; // Reemplaza con tu contraseña real
+
+                        // Construye la URL de la API
+                        const apiUrl = `https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=${apiKey}`;
+
+                        // Construye el objeto de solicitud
+                        const requestBody = {
+                            username: username,
+                            password: password,
+                            request_token: token,
+                        };
+
+                        // Realiza la solicitud POST a la API
+                        const response = await fetch(apiUrl, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({
-                                username: 'tu_nombre_de_usuario',
-                                password: 'tu_contraseña',
-                                request_token: 'tu_token_de_solicitud',
-                            }),
+                            body: JSON.stringify(requestBody),
                         });
+
                         if (response.ok) {
                             // Si la autenticación es exitosa, almacena el token y establece el estado de inicio de sesión en verdadero
                             const data = await response.json();
                             localStorage.setItem('token', data.request_token); // Almacena el token en el almacenamiento local
                             this.isLoggedIn = true;
-                            this.username = this.username;
+                            this.username = username; // Asigna el nombre de usuario
                         } else {
                             // Si la autenticación falla, muestra un mensaje de error
                             this.error = 'Nombre de usuario o contraseña incorrectos';
